@@ -307,29 +307,53 @@ app.get('/api/profile', (req, res) => {
 
 
 
-// Signup Page Route
+// // Signup Page Route
+// app.get('/signup', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'signup.html'));
+// });
+
+// // Login Page Route
+// app.get('/login', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'login.html'));
+// });
+
+// // App Page Route
+// app.get('/Rathamapp', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'Rathamapp.html'));
+// });
+
+//  app.get('/sent', (req, res) => {
+//    res.sendFile(path.join(__dirname, 'sent.html'));
+//  });
+
+// // // Add this route (already partially present)
+// app.get('/order', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'order.html'));
+// });
+
+
+// Corrected Routes
 app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'signup.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'signup.html'));
 });
 
-// Login Page Route
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'login.html'));
 });
 
-// App Page Route
 app.get('/Rathamapp', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Rathamapp.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'Rathamapp.html'));
 });
 
- app.get('/sent', (req, res) => {
-   res.sendFile(path.join(__dirname, 'sent.html'));
- });
+app.get('/sent', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'sent.html'));
+});
 
-// // Add this route (already partially present)
 app.get('/order', (req, res) => {
-  res.sendFile(path.join(__dirname, 'order.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'order.html'));
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

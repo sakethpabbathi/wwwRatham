@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: ratham-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: free
+    branches: 
+      - main
+    envVars:
+      - key: DB_HOST
+        value: your-database-host
+      - key: DB_USER
+        value: your-database-username
+      - key: DB_PASS
+        value: your-database-password
+      - key: DB_NAME
+        value: your-database-name
+      - key: TWILIO_ACCOUNT_SID
+        value: your-twilio-account-sid
+      - key: TWILIO_AUTH_TOKEN
+        value: your-twilio-auth-token
+      - key: TWILIO_PHONE_NUMBER
+        value: your-twilio-phone-number

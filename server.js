@@ -146,9 +146,8 @@ app.delete('/api/remove-saved-product/:productId', (req, res) => {
 
 // Serve order.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Rathamapp.html'));
-  });
-
+  res.sendFile(path.join(__dirname, 'frontend', 'Rathamapp.html'));
+});
 
   
   app.post('/submit-order', (req, res) => {

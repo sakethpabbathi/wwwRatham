@@ -142,7 +142,7 @@ app.delete('/api/remove-saved-product/:productId', (req, res) => {
     });
 });
 
-
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Serve order.html
 app.get('/', (req, res) => {

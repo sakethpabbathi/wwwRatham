@@ -16,5 +16,26 @@
     "run": "^1.5.0",
     "start": "^5.1.0",
     "twilio": "^5.6.0"
-  }
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakethpabbathi/backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sakethpabbathi/backend/issues"
+  },
+  "homepage": "https://github.com/sakethpabbathi/backend#readme"
 }

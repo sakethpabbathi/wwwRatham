@@ -316,12 +316,12 @@ app.post('/signup', (req, res) => {
 
 
   bcrypt.hash(password, 10, (err, hashedPassword) => {
-    // if (err) {
-    //   console.log(err);
-    //   return res.status(500).json({
-    //     error: "Error hashing password"
-    //   });
-    // }
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        error: "Error hashing password"
+      });
+    }
 
     const sql = "INSERT INTO signin (Firstname, Lastname, number, password) VALUES (?, ?, ?, ?)";
     db.query(sql, [Firstname, Lastname, number, hashedPassword], (err, result) => {
@@ -390,35 +390,7 @@ try {
 });
 
 
-// app.post('/login', (req, res) => {
-//   const { number, password } = req.body;
 
-//   const query = "SELECT * FROM signin WHERE number = ?";
-//   db.query(query, [number], async (err, results) => {
-//     if (err) {
-//       console.error('Login Error:', err);
-//       return res.status(500).json({ error: 'Internal server error' });
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(401).json({ error: 'Invalid Number or Password' });
-//     }
-
-//     const user = results[0];
-//     try {
-//       const isMatch = await bcrypt.compare(password, user.password);
-
-//       if (!isMatch) {
-//         return res.status(401).json({ error: 'Invalid Number or Password' });
-//       }
-
-//       res.status(200).json({ message: 'Login successful' });
-//     } catch (err) {
-//       console.error('Error during password comparison:', err);
-//       res.status(500).json({ error: 'Internal server error' });
-//     }
-//   });
-// });
 
 
 // POST endpoint to save profile data
@@ -517,38 +489,6 @@ app.get('/mainapp', (req, res) => {
 });
 
 
-// // Corrected Routes
-// app.get('/signup', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../', 'frontend', 'signup.html'));
-// });
-// app.get('/maincontact', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../', 'frontend', 'maincontact.html'));
-// });
-// app.get('/dupliproducts', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../', 'frontend', 'dupliproducts.html'));
-// });
-// app.get('/profile', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../', 'frontend', 'profile.html'));
-// });
-// app.get('/mainabout', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../', 'frontend', 'mainabout.html'));
-// });
-
-// app.get('/login', (req, res) => {
-//   res.sendFile(path.join(__dirname,'../', 'frontend', 'login.html'));
-// });
-
-// app.get('/Rathamapp', (req, res) => {
-//   res.sendFile(path.join(__dirname,'../', 'frontend', 'Rathamapp.html'));
-// });
-
-// app.get('/sent', (req, res) => {
-//   res.sendFile(path.join(__dirname,'../', 'frontend', 'sent.html'));
-// });
-
-// app.get('/order', (req, res) => {
-//   res.sendFile(path.join(__dirname,'../', 'frontend', 'order.html'));
-// });
 
 
 const PORT = process.env.PORT || 3000;

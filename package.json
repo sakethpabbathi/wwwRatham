@@ -5,6 +5,7 @@
     "body-parser": "^1.20.3",
     "browser-image-compression": "^2.0.2",
     "cors": "^2.8.5",
+    "debug": "^4.4.0",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
@@ -21,7 +22,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"

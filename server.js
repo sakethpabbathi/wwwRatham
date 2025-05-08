@@ -33,25 +33,58 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const twilioClient = twilio(accountSid, authToken);
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_NAME,
+//   port: process.env.DB_PORT
+// });
 
 
 
-db.connect(err => {
-  if (err) {
-    console.error('MySQL Connection Error:', err);
-    return;
-  }
-  console.log(' MySQL Connected to freesql...');
-});
+// db.connect(err => {
+//   if (err) {
+//     console.error('MySQL Connection Error:', err);
+//     return;
+//   }
+//   console.log(' MySQL Connected to freesql...');
+// });
 
 
+
+let db;
+
+function handleDisconnect() {
+  db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
+  });
+
+  db.connect(err => {
+    if (err) {
+      console.error('Error connecting to MySQL:', err);
+      setTimeout(handleDisconnect, 2000); // Retry connection after 2 seconds
+    } else {
+      console.log('MySQL Connected...');
+    }
+  });
+
+  db.on('error', err => {
+    console.error('MySQL Error:', err);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.log('Reconnecting to MySQL...');
+      handleDisconnect(); // Reconnect on connection loss
+    } else {
+      throw err;
+    }
+  });
+}
+
+handleDisconnect();
 
 
 // Add product to cart
@@ -211,6 +244,11 @@ app.use(express.static(path.join(__dirname,'frontend')));
 //   res.sendFile(path.join(__dirname, '../frontend', 'Rathamapp.html'));
 // });
 
+
+
+app.use(cors({
+  origin: 'https://frontend-uoj7.onrender.com' // Allow requests from the frontend
+}));
 app.get('/', (req, res) => {
   res.redirect('https://frontend-uoj7.onrender.com/Rathamapp.html');
 });
@@ -256,7 +294,7 @@ app.post('/submit-order', (req, res) => {
       })
       .then(message => {
 
-        res.redirect('/sent.html');
+        res.redirect('https://frontend-uoj7.onrender.com/sent.html');
 
       })
       .catch(err => {
@@ -278,12 +316,12 @@ app.post('/signup', (req, res) => {
 
 
   bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({
-        error: "Error hashing password"
-      });
-    }
+    // if (err) {
+    //   console.log(err);
+    //   return res.status(500).json({
+    //     error: "Error hashing password"
+    //   });
+    // }
 
     const sql = "INSERT INTO signin (Firstname, Lastname, number, password) VALUES (?, ?, ?, ?)";
     db.query(sql, [Firstname, Lastname, number, hashedPassword], (err, result) => {
@@ -302,48 +340,83 @@ app.post('/signup', (req, res) => {
 
 
 
-// Login Route
+// // Login Route
+// app.post('/login', (req, res) => {
+//   const {
+//     number,
+//     password
+//   } = req.body;
+
+//   const query = "SELECT * FROM signin WHERE number = ?";
+//   db.query(query, [number], async (err, results) => {
+//     if (err) {
+//       console.error('Login Error:', err);
+//       return res.status(500).json({
+//         error: "Internal server error"
+//       });
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(401).json({
+//         error: "Invalid Number or Password"
+//       });
+//     }
+
+//     const user = results[0];
+// try {
+//     const isMatch = await bcrypt.compare(password, user.password);
+
+//     if (!isMatch) {
+//       return res.status(401).json({
+//         error: "Invalid Number or Password"
+//       });
+//     }
+
+//     // Send SMS to owner after successful login
+//     twilioClient.messages.create({
+//       body: `User with number ${number} has logged in.`,
+//       from: process.env.TWILIO_PHONE_FROM,
+//       to: process.env.TWILIO_PHONE_TO
+//     });
+
+//     res.status(200).json({
+//       message: "Login successful"
+//     });
+//     } catch (err) {
+//       console.error("Error during password comparison or SMS:", err);
+//       res.status(500).json({ error: "Internal server error" });
+//     }
+//   });
+// });
+
+
 app.post('/login', (req, res) => {
-  const {
-    number,
-    password
-  } = req.body;
+  const { number, password } = req.body;
 
   const query = "SELECT * FROM signin WHERE number = ?";
   db.query(query, [number], async (err, results) => {
     if (err) {
       console.error('Login Error:', err);
-      return res.status(500).json({
-        error: "Internal server error"
-      });
+      return res.status(500).json({ error: 'Internal server error' });
     }
 
     if (results.length === 0) {
-      return res.status(401).json({
-        error: "Invalid Number or Password"
-      });
+      return res.status(401).json({ error: 'Invalid Number or Password' });
     }
 
     const user = results[0];
+    try {
+      const isMatch = await bcrypt.compare(password, user.password);
 
-    const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Invalid Number or Password' });
+      }
 
-    if (!isMatch) {
-      return res.status(401).json({
-        error: "Invalid Number or Password"
-      });
+      res.status(200).json({ message: 'Login successful' });
+    } catch (err) {
+      console.error('Error during password comparison:', err);
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    // Send SMS to owner after successful login
-    twilioClient.messages.create({
-      body: `User with number ${number} has logged in.`,
-      from: process.env.TWILIO_PHONE_FROM,
-      to: process.env.TWILIO_PHONE_TO
-    });
-
-    res.status(200).json({
-      message: "Login successful"
-    });
   });
 });
 

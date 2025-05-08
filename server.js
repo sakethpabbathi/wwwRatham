@@ -341,84 +341,84 @@ app.post('/signup', (req, res) => {
 
 
 // // Login Route
-// app.post('/login', (req, res) => {
-//   const {
-//     number,
-//     password
-//   } = req.body;
-
-//   const query = "SELECT * FROM signin WHERE number = ?";
-//   db.query(query, [number], async (err, results) => {
-//     if (err) {
-//       console.error('Login Error:', err);
-//       return res.status(500).json({
-//         error: "Internal server error"
-//       });
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(401).json({
-//         error: "Invalid Number or Password"
-//       });
-//     }
-
-//     const user = results[0];
-// try {
-//     const isMatch = await bcrypt.compare(password, user.password);
-
-//     if (!isMatch) {
-//       return res.status(401).json({
-//         error: "Invalid Number or Password"
-//       });
-//     }
-
-//     // Send SMS to owner after successful login
-//     twilioClient.messages.create({
-//       body: `User with number ${number} has logged in.`,
-//       from: process.env.TWILIO_PHONE_FROM,
-//       to: process.env.TWILIO_PHONE_TO
-//     });
-
-//     res.status(200).json({
-//       message: "Login successful"
-//     });
-//     } catch (err) {
-//       console.error("Error during password comparison or SMS:", err);
-//       res.status(500).json({ error: "Internal server error" });
-//     }
-//   });
-// });
-
-
 app.post('/login', (req, res) => {
-  const { number, password } = req.body;
+  const {
+    number,
+    password
+  } = req.body;
 
   const query = "SELECT * FROM signin WHERE number = ?";
   db.query(query, [number], async (err, results) => {
     if (err) {
       console.error('Login Error:', err);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({
+        error: "Internal server error"
+      });
     }
 
     if (results.length === 0) {
-      return res.status(401).json({ error: 'Invalid Number or Password' });
+      return res.status(401).json({
+        error: "Invalid Number or Password"
+      });
     }
 
     const user = results[0];
-    try {
-      const isMatch = await bcrypt.compare(password, user.password);
+try {
+    const isMatch = await bcrypt.compare(password, user.password);
 
-      if (!isMatch) {
-        return res.status(401).json({ error: 'Invalid Number or Password' });
-      }
+    if (!isMatch) {
+      return res.status(401).json({
+        error: "Invalid Number or Password"
+      });
+    }
 
-      res.status(200).json({ message: 'Login successful' });
+    // Send SMS to owner after successful login
+    twilioClient.messages.create({
+      body: `User with number ${number} has logged in.`,
+      from: process.env.TWILIO_PHONE_FROM,
+      to: process.env.TWILIO_PHONE_TO
+    });
+
+    res.status(200).json({
+      message: "Login successful"
+    });
     } catch (err) {
-      console.error('Error during password comparison:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error("Error during password comparison or SMS:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 });
+
+
+// app.post('/login', (req, res) => {
+//   const { number, password } = req.body;
+
+//   const query = "SELECT * FROM signin WHERE number = ?";
+//   db.query(query, [number], async (err, results) => {
+//     if (err) {
+//       console.error('Login Error:', err);
+//       return res.status(500).json({ error: 'Internal server error' });
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(401).json({ error: 'Invalid Number or Password' });
+//     }
+
+//     const user = results[0];
+//     try {
+//       const isMatch = await bcrypt.compare(password, user.password);
+
+//       if (!isMatch) {
+//         return res.status(401).json({ error: 'Invalid Number or Password' });
+//       }
+
+//       res.status(200).json({ message: 'Login successful' });
+//     } catch (err) {
+//       console.error('Error during password comparison:', err);
+//       res.status(500).json({ error: 'Internal server error' });
+//     }
+//   });
+// });
 
 
 // POST endpoint to save profile data

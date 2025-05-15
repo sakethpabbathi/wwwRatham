@@ -2,8 +2,8 @@ services:
   - type: web
     name: ratham-backend
     env: node
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && node server.js
+    buildCommand: npm install
+    startCommand: node server.js
     plan: free
     branches: 
       - main
@@ -21,5 +21,7 @@ services:
         value: your-twilio-account-sid
       - key: TWILIO_AUTH_TOKEN
         value: your-twilio-auth-token
-      - key: TWILIO_PHONE_NUMBER
-        value: your-twilio-phone-number
+      - key: TWILIO_PHONE_FROM
+        value: your-twilio-phone-from
+      - key: TWILIO_PHONE_TO
+        value: your-twilio-phone-to

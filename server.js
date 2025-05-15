@@ -86,6 +86,10 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/Rathamapp.html');
+});
+
 
 // Add product to cart
 app.post('/api/add-to-cart', (req, res) => {
@@ -237,7 +241,7 @@ app.delete('/api/remove-saved-product/:productId', (req, res) => {
   });
 });
 
-app.use(express.static(path.join(__dirname,'frontend')));
+// app.use(express.static(path.join(__dirname,'frontend')));
 
 // Serve order.html
 // app.get('/', (req, res) => {
@@ -246,11 +250,11 @@ app.use(express.static(path.join(__dirname,'frontend')));
 
 
 
-app.use(cors({
-  origin: 'https://frontend-uoj7.onrender.com' // Allow requests from the frontend
-}));
+// app.use(cors({
+//   origin: 'https://frontend-uoj7.onrender.com' // Allow requests from the frontend
+// }));
 app.get('/', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/Rathamapp.html');
+  res.redirect('Rathamapp.html');
 });
 
 app.post('/submit-order', (req, res) => {
@@ -294,7 +298,7 @@ app.post('/submit-order', (req, res) => {
       })
       .then(message => {
 
-        res.redirect('https://frontend-uoj7.onrender.com/sent.html');
+        res.redirect('sent.html');
 
       })
       .catch(err => {
@@ -452,41 +456,41 @@ app.get('/api/profile', (req, res) => {
 
 
 
-app.get('/signup', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/signup.html');
-});
+// app.get('/signup', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/signup.html');
+// });
 
-app.get('/login', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/login.html');
-});
+// app.get('/login', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/login.html');
+// });
 
-app.get('/Rathamapp', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/Rathamapp.html');
-});
+// app.get('/Rathamapp', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/Rathamapp.html');
+// });
 
-app.get('/sent', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/sent.html');
-});
+// app.get('/sent', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/sent.html');
+// });
 
-app.get('/about', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/about.html');
-});
-app.get('/contact', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/contact.html');
-});
-app.get('/mainabout', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/mainabout.html');
-});
-app.get('/maincontact', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/maincontact.html');
-});
-app.get('/dupliproducts', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/dupliproducts.html');
-});
+// app.get('/about', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/about.html');
+// });
+// app.get('/contact', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/contact.html');
+// });
+// app.get('/mainabout', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/mainabout.html');
+// });
+// app.get('/maincontact', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/maincontact.html');
+// });
+// app.get('/dupliproducts', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/dupliproducts.html');
+// });
 
-app.get('/mainapp', (req, res) => {
-  res.redirect('https://frontend-uoj7.onrender.com/mainapp.html');
-});
+// app.get('/mainapp', (req, res) => {
+//   res.redirect('https://frontend-uoj7.onrender.com/mainapp.html');
+// });
 
 
 
